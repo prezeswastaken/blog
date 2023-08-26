@@ -13,6 +13,8 @@ services:
       MYSQL_ROOT_PASSWORD: example
     ports:
       - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql
 
   phpmyadmin:
         image: beeyev/phpmyadmin-lightweight:latest
@@ -25,4 +27,6 @@ services:
             MYSQL_USERNAME: "root"
             MYSQL_ROOT_PASSWORD: "example"
             PMA_HOST: mysql
+volumes:
+  dbdata:
 
