@@ -30,3 +30,10 @@ func PostCreate(c *fiber.Ctx) error {
 	initializers.DB.Create(&post) // pass pointer of data to Create
 	return c.SendString("I'm a POST request!")
 }
+
+// This is the new function to get all posts
+func PostGetAll(c *fiber.Ctx) error {
+	var posts []models.Post                     // declare a slice of models.Post structs
+	initializers.DB.Find(&posts)                // query all records from posts table
+	return c.Status(fiber.StatusOK).JSON(posts) // send 200 OK response with posts slice as JSON body
+}
