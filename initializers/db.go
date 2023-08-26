@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/prezeswastaken/blog/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -14,12 +15,16 @@ func ConnectDoDatabase() {
 	DbUrl := os.Getenv("DB_URL")
 	var err error
 	dsn := DbUrl
-	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		fmt.Println("Failed to connect to database :(")
+		fmt.Println("Failed to connect to the database :(")
 	} else {
-		fmt.Println("Connected? I guess...")
+		fmt.Println("Connected to the database!")
 	}
-	println(DB)
+	fmt.Println(DB)
+}
+
+func SyncDb() {
+	DB.AutoMigrate(&models.Post{})
 }
