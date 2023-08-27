@@ -29,6 +29,8 @@ func main() {
 
 	app.Post("api/create", controllers.PostCreate)
 
+	app.Delete("api/delete", controllers.PostDelete)
+
 	// Serve api
 	app.Listen(":" + os.Getenv("PORT"))
 }

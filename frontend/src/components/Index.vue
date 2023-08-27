@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import DefaultLayout from "./DefaultLayout.vue";
 import Post from "./Post.vue";
 import CreatingToggle from "./CreatingToggle.vue";
@@ -8,7 +8,7 @@ import CreateForm from "./CreateForm.vue";
 type Post = {
   Title: string;
   Body: string;
-  Id: number;
+  ID: number;
 };
 
 const postsArray = ref<Post[]>([]);
@@ -27,9 +27,18 @@ function toggleCreating() {
   console.log(creating.value);
 }
 
+let timer: number;
 onMounted(() => {
   fetchPosts();
+  timer = setInterval(() => {
+    fetchPosts();
+  }, 5000);
 });
+
+onBeforeUnmount(() => {
+  clearInterval(timer);
+});
+
 function fetchPosts() {
   fetch("//localhost:3000/api/get-all")
     .then((response) => response.json())
@@ -46,10 +55,15 @@ function fetchPosts() {
       @toggle-creating="toggleCreating"
     />
     <div class="flex flex-col gap-5">
-      <p>Hello From child!</p>
+      <p>Welcome to copy pasta battle royale!</p>
 
-      <div v-for="post in postsArray" :key="post.Id">
-        <Post :title="post.Title" :body="post.Body" />
+      <div v-for="post in postsArray" :key="post.ID">
+        <Post
+          :title="post.Title"
+          :body="post.Body"
+          :id="post.ID"
+          @fetch="fetchPosts"
+        />
       </div>
     </div>
   </DefaultLayout>
