@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="p-5 bg-emerald-500">
+  <div class="p-5 bg-emerald-500 rounded-xl">
     <div class="flex flex-col">
       <p class="text-lg">{{ title }}</p>
       <div class="font-mono font-normal">{{ body }}</div>
