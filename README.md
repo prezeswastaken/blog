@@ -4,5 +4,5 @@ Copy pasta battle royale is a small website when everyone can write and delete a
 ## Why is this?
 For some time i have been interested in go and vue. Those two technologies always were totally foreign to me, so i decided i will use them together to make something. So i did!
 This of course isn't some state-of-the-art web masterpiece, but it definitely helped me with getting my feet wet with go and vue.js. I' am happy with how it came up and look forward for building something with vue or go again!
-## How to run this
+## How to run this?
 Docker compose file attached here is only for database. To run this project, you would need go and npm installed.
