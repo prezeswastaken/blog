@@ -1,26 +1,69 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import DefaultLayout from "./DefaultLayout.vue";
 import Post from "./Post.vue";
+import CreatingToggle from "./CreatingToggle.vue";
+import CreateForm from "./CreateForm.vue";
 
 type Post = {
-  title: string;
-  body: string;
+  Title: string;
+  Body: string;
+  ID: number;
 };
 
-const post1: Post = { title: "Fuck you", body: "FIshafiohfsoisfhajoihjoi" };
-const post2: Post = { title: "Again?", body: "Pizdofofofofofomofosojfs" };
-const post3: Post = { title: "FKfff?", body: "Pizdofofofofofomofosojfs" };
-const post4: Post = { title: "FKfff?", body: "Pizdofofofofofomofosojfs" };
-const posts: Array<Post> = [post1, post2, post3, post4];
+const postsArray = ref<Post[]>([]);
+
+let creating = ref(false);
+let toggleButtonMessage = ref("Create new pasta!");
+
+function toggleCreating() {
+  creating.value = !creating.value;
+  if (!creating.value) {
+    toggleButtonMessage.value = "Create new pasta!";
+    fetchPosts();
+  } else {
+    toggleButtonMessage.value = "Go back to reading";
+  }
+  console.log(creating.value);
+}
+
+let timer: number;
+onMounted(() => {
+  fetchPosts();
+  timer = setInterval(() => {
+    fetchPosts();
+  }, 5000);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(timer);
+});
+
+function fetchPosts() {
+  fetch("//localhost:3000/api/get-all")
+    .then((response) => response.json())
+    .then((data) => (postsArray.value = data))
+    .catch((err) => console.log(err.message));
+}
 </script>
 
 <template>
   <DefaultLayout>
+    <CreateForm @toggle-creating="fetchPosts" v-if="creating" />
+    <CreatingToggle
+      :message="toggleButtonMessage"
+      @toggle-creating="toggleCreating"
+    />
     <div class="flex flex-col gap-5">
-      <p>Hello From child!</p>
+      <p>Welcome to copy pasta battle royale!</p>
 
-      <div v-for="(post, index) in posts" :key="index">
-        <Post :title="post.title" :body="post.body" />
+      <div v-for="post in postsArray" :key="post.ID">
+        <Post
+          :title="post.Title"
+          :body="post.Body"
+          :id="post.ID"
+          @fetch="fetchPosts"
+        />
       </div>
     </div>
   </DefaultLayout>

@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/prezeswastaken/blog/initializers"
 	"github.com/prezeswastaken/blog/models"
@@ -28,5 +30,27 @@ func PostCreate(c *fiber.Ctx) error {
 		Body:  postData.Body,
 	}
 	initializers.DB.Create(&post) // pass pointer of data to Create
-	return c.SendString("I'm a POST request!")
+	return c.SendString("Post added succesfully!")
+}
+
+// This is the new function to get all posts
+func PostGetAll(c *fiber.Ctx) error {
+	var posts []models.Post                     // declare a slice of models.Post structs
+	initializers.DB.Find(&posts)                // query all records from posts table
+	return c.Status(fiber.StatusOK).JSON(posts) // send 200 OK response with posts slice as JSON body
+}
+
+func PostDelete(c *fiber.Ctx) error {
+	type DeleteData struct {
+		Id int `json:"Id"`
+	}
+	deleteData := new(DeleteData)
+
+	if err := c.BodyParser(deleteData); err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"errors": err.Error(),
+		})
+	}
+	initializers.DB.Delete(&models.Post{}, deleteData.Id)
+	return c.SendString("Post " + strconv.Itoa(deleteData.Id) + " deleted succesfully!")
 }
