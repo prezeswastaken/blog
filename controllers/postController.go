@@ -28,7 +28,7 @@ func PostCreate(c *fiber.Ctx) error {
 		Body:  postData.Body,
 	}
 	initializers.DB.Create(&post) // pass pointer of data to Create
-	return c.SendString("I'm a POST request!")
+	return c.SendString("Post added succesfully!")
 }
 
 // This is the new function to get all posts

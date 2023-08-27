@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import DefaultLayout from "./DefaultLayout.vue";
 import Post from "./Post.vue";
+import CreatingToggle from "./CreatingToggle.vue";
 
 type Post = {
   Title: string;
@@ -10,6 +11,13 @@ type Post = {
 };
 
 const postsArray = ref<Post[]>([]);
+
+let creating = ref(false);
+
+function toggleCreating() {
+  creating.value = !creating.value;
+  console.log(creating.value);
+}
 
 onMounted(() => {
   fetch("//localhost:3000/api/get-all")
@@ -21,6 +29,7 @@ onMounted(() => {
 
 <template>
   <DefaultLayout>
+    <CreatingToggle @toggle-creating="toggleCreating" />
     <div class="flex flex-col gap-5">
       <p>Hello From child!</p>
 
